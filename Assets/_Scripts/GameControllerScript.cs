@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 using hf = HelperFunctions;
 
@@ -29,10 +30,11 @@ using hf = HelperFunctions;
 
 //Ellipsoid possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 +z^2/c^2 = 1
-    //2. Solve for actual a,b,c: x^2/a^2 + y^2/b^2 + z^2/c^2 = 1/16, 1/4, 4, 16
-    //3. xy and xz traces
-    //4. xy and yz traces
-    //5. xz and yz traces
+    //2. Direct equation but denominators are solved
+    //3. Solve for actual a,b,c: x^2/a^2 + y^2/b^2 + z^2/c^2 = 1/16, 1/4, 4, 16 with solved denominators
+    //4. xy and xz traces
+    //5. xy and yz traces
+    //6. xz and yz traces
 
 //Hyperboloid of one sheet possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 - z^2/c^2 = 1
@@ -62,6 +64,9 @@ using hf = HelperFunctions;
     //3. xy and yz traces
     //4. xz and yz traces
 
+//The first and second shapes should be 1, then random for all other rounds
+
+
 public class GameControllerScript : MonoBehaviour {
 
     //The game has several states
@@ -76,7 +81,8 @@ public class GameControllerScript : MonoBehaviour {
     //Shape colored (7): User got correct color. Shape is finished and moving out.
 
     //Level and round variables
-    public static int levelNumber = 5;
+    public static int levelNumber = 1;
+    public static int roundNumber = 1;
     private int roundState;
 
     //Target shape variables
@@ -94,6 +100,23 @@ public class GameControllerScript : MonoBehaviour {
 
     public Transform blankEllipticParaboloid;
     public Transform blankHyperbolicParaboloid;
+
+    //Jumbotron and images
+    public GameObject jumbotron;
+    public TextMeshPro text1;
+    public TextMeshPro text2;
+    public TextMeshPro text3;
+    public TextMeshPro text4;
+    public TextMeshPro text5;
+    public TextMeshPro text6;
+    public TextMeshPro text7;
+    public TextMeshPro text8;
+    public Texture2D ellipsoid1;
+    public Texture2D ellipsoid2;
+    public Texture2D ellipsoid3;
+    public Texture2D ellipsoid4;
+
+
 
     //roundState 2
     public new Camera camera;
@@ -151,7 +174,7 @@ public class GameControllerScript : MonoBehaviour {
     void Start() {
         Debug.Log(levelNumber);
         //Set roundstate to preround
-        roundState = 0;
+        roundState = 0; 
         //Reset timer and timing mechanism
         time = 0;
         timeWhenLastShapeFinished = 0;
@@ -180,6 +203,74 @@ public class GameControllerScript : MonoBehaviour {
         knobs[2] = knob3;
 
         knobIncrement = (rightBound - leftBound) / 3;
+
+        //Update jumbotron with starting screen
+        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
+        resetAllText();
+    }
+
+    void updateJumbotron(int inputShape, (int, int, int, int, int, int, int) inputShapeData, int inputRoundNumber) {
+
+        int questionType;
+        resetAllText();
+        switch (inputShape) {
+            case 1:
+                //Determine which question type will be asked
+                questionType = Random.Range(1,5);
+                if (inputRoundNumber == 1) {questionType = 4;}
+
+
+                switch (questionType) {
+                    case 1:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
+                        //Set a, b, c
+                        text1.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text2.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text3.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
+                    case 2:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid2;
+                        //Set a, b, c
+                        text1.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
+                        text2.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
+                        text3.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
+                        break;
+                    case 3:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid3;
+                        //Randomly pick a number from [2, 3, 4, 8]
+                        int[] numbersArr = {2, 3, 4, 8};
+                        int factor = numbersArr[Random.Range(0, numbersArr.Length)];
+                        //Set a, b, c
+                        text1.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item5)).ToString();
+                        text2.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item6)).ToString();
+                        text3.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item7)).ToString();
+                        text4.GetComponent<TextMeshPro>().text = factor.ToString();
+                        break;
+                    case 4:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid4;
+                        //Set a, b, c
+                        text5.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text6.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text7.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text8.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
+
+                }
+            break;
+
+
+        }
+    }
+
+    void resetAllText() {
+        text1.GetComponent<TextMeshPro>().text = "";
+        text2.GetComponent<TextMeshPro>().text = "";
+        text3.GetComponent<TextMeshPro>().text = "";
+        text4.GetComponent<TextMeshPro>().text = "";
+        text5.GetComponent<TextMeshPro>().text = "";
+        text6.GetComponent<TextMeshPro>().text = "";
+        text7.GetComponent<TextMeshPro>().text = "";
+        text8.GetComponent<TextMeshPro>().text = "";
     }
 
 
@@ -207,6 +298,11 @@ public class GameControllerScript : MonoBehaviour {
             desiredShapeSize = new int[] {desiredShapeData.Item5, desiredShapeData.Item6, desiredShapeData.Item7};
 
             Debug.Log(desiredShapeData);
+
+            //Update jumbotron with new desired shape
+            updateJumbotron(desiredShape, desiredShapeData, roundNumber);
+
+
 
             //Update round number
             roundState = 1;
@@ -264,7 +360,6 @@ public class GameControllerScript : MonoBehaviour {
                     if (hf.areAllElementsNotEqual(equationSelections, -1)) {
                         if (shapeCreated) {
                             Destroy(product.Find("Shape(Clone)").gameObject);
-                            Debug.Log("Destroyed shape");
                         } else {
                             shapeCreated = true;
                         }
@@ -363,7 +458,6 @@ public class GameControllerScript : MonoBehaviour {
                     //Snap recently deselected knob to its increment
                     selectedKnobInstance.transform.position = new Vector3(Mathf.Round(selectedKnobInstance.transform.position.x / knobIncrement) * knobIncrement, selectedKnobInstance.transform.position.y, selectedKnobInstance.transform.position.z);
                     knobSelections[selectedKnob] = (int)Mathf.Round((selectedKnobInstance.transform.position.x - leftBound) / knobIncrement);
-                    Debug.Log((selectedKnobInstance.transform.position.x - leftBound) / knobIncrement);
                     done = true;
                 
                 }
@@ -424,15 +518,12 @@ public class GameControllerScript : MonoBehaviour {
                     buttons[i,j].GetComponent<Renderer>().material = buttonDeselectedMaterial;
                 }
             }
+            //Update roundNumber
+            roundNumber++;
 
             //Start next round
             roundState = 0;
 
-        }
-        
-        //If m key pressed, print dial selections
-        if (Input.GetKeyDown(KeyCode.M)) {
-            Debug.Log("Knob selections: " + knobSelections[0] + " " + knobSelections[1] + " " + knobSelections[2]);
         }
     }
 }

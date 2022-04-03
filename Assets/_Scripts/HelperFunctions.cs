@@ -83,9 +83,9 @@ public class HelperFunctions
         } else if (areIntArraysEqual(eqsel, new int[] {3,1,0,0})) {
             return (6, new Vector3(0,0,-90));
         } else if (areIntArraysEqual(eqsel, new int[] {0,3,1,0})) {
-            return (6, new Vector3(90,0,0));
-        } else if (areIntArraysEqual(eqsel, new int[] {1,3,0,0})) {
             return (6, new Vector3(-90,0,0));
+        } else if (areIntArraysEqual(eqsel, new int[] {1,3,0,0})) {
+            return (6, new Vector3(90,0,0));
         } else if (areIntArraysEqual(eqsel, new int[] {0,1,3,0})) {
             return (6, new Vector3(0,0,0));
         } else if (areIntArraysEqual(eqsel, new int[] {1,0,3,0})) {
@@ -160,25 +160,35 @@ public class HelperFunctions
                 x = 0;
                 y = 0;
                 z = 0;
+                int negateValsInt = Random.Range(0, 2);
+                bool negateVals = negateValsInt == 1;
                 rand = Random.Range(0, 3);
                 if (rand == 0) {
                     x = 3;
+                    if (negateVals) {y=1;z=1;}
                 } else if (rand == 1) {
                     y = 3;
+                    if (negateVals) {x=1;z=1;}
                 } else {
                     z = 3;
+                    if (negateVals) {x=1;y=1;}
                 }
                 constant = 0;
                 break;
             case 6:
-                //Randomly assign 0, 1, 3 to x,y,z with no repeats
-                x = Random.Range(0, 3);
-                y = Random.Range(0, 3);
-                z = Random.Range(0, 3);
-                while (x == y || x == z || y == z) {
-                    y = Random.Range(0, 3);
-                    z = Random.Range(0, 3);
+                //Randomly shuffle array [0, 1, 3]
+                int[] randArray = new int[] {0, 1, 3};
+                for (int i = 0; i < randArray.Length; i++) {
+                    int temp = randArray[i];
+                    int randIndex = Random.Range(i, randArray.Length);
+                    randArray[i] = randArray[randIndex];
+                    randArray[randIndex] = temp;
                 }
+                x = randArray[0];
+                y = randArray[1];
+                z = randArray[2];
+
+
                 constant = 0;
                 break;
             default:
@@ -187,6 +197,21 @@ public class HelperFunctions
         }
         return (x, y, z, constant, a, b, c);
 
-    } 
+    }
+
+    public static float indexToScale(int index) {
+        switch(index) {
+            case 0:
+                return 0.5f;
+            case 1:
+                return 1f;
+            case 2:
+                return 1.5f;
+            case 3:
+                return 2f;
+            default:
+                return -1f;
+        }
+    }
 
 }

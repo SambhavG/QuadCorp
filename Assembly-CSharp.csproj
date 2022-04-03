@@ -41,12 +41,15 @@
      <Compile Include="Assets\UnityCrossSectionShaderGraph-master\Assets\Scripts\CrossSectionPlane.cs" />
      <Compile Include="Assets\Cross Section Shader\Scripts\GenericThreePlanesCuttingController.cs" />
      <Compile Include="Assets\Submarine project\cross-section-shader-main\CrossSectionShader\Assets\Scripts\SixPlanesCuttingControllerCopy.cs" />
+     <Compile Include="Assets\MainMenu.cs" />
      <Compile Include="Assets\_Scripts\FirstPersonController.cs" />
      <Compile Include="Assets\CuttingTutorial\ClippingPlane.cs" />
      <Compile Include="Assets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
      <Compile Include="Assets\_Scripts\GameControllerScript.cs" />
      <Compile Include="Assets\Mobile\Scripts\Utilities\MobileDisableAutoSwitchControls.cs" />
+     <Compile Include="Assets\LevelsScript.cs" />
      <Compile Include="Assets\Cross Section Shader\Scripts\ThreeAAPlanesCuttingController.cs" />
+     <Compile Include="Assets\_Scripts\MainMenuScript.cs" />
      <Compile Include="Assets\_Scripts\SixPlanesCuttingController.cs" />
      <Compile Include="Assets\Mobile\Scripts\VirtualInputs\UIVirtualJoystick.cs" />
      <Compile Include="Assets\Mobile\Scripts\VirtualInputs\UIVirtualTouchZone.cs" />
@@ -59,9 +62,6 @@
      <Compile Include="Assets\Cross Section Shader\Scripts\OnePlaneCuttingController.cs" />
      <Compile Include="Assets\_Scripts\HelperFunctions.cs" />
      <Compile Include="Assets\Cross Section Shader\Scripts\ArcBall.cs" />
-     <Compile Include="Assets\MainMenu.cs" />
-     <Compile Include="Assets\_Scripts\MainMenuScript.cs" />
-     <Compile Include="Assets\LevelsScript.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\Cross Section Shader\Shaders\GenericThreePlanesBSP.shader" />
