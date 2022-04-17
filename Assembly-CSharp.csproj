@@ -747,6 +747,24 @@
     <Reference Include="Unity.RenderPipelines.Core.Editor">
         <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ProGrids.Editor">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProGrids.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProGrids">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProGrids.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+        <HintPath>D:\Programs\Unity\Projects\QuadCorp\Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

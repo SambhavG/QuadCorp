@@ -6,15 +6,16 @@ using TMPro;
 using hf = HelperFunctions;
 
 
-//TODO:
-//Add a jumbo screen for details of what the shape should be
-//Add station 3
-//Add gui/points system
-//Add a pause menu
-//Add a level complete screeen
-//Fix the camera movement
-//Level design of factory and station materials
-//Info at beginning of the level stating how to make a shape
+
+//TODO order of things:
+//Add the rest of the level screens
+//Add scoring and stars system
+//Add a pause menu and level complete screen
+//Add instructions
+//Fix camera movement
+
+
+
 
 //Jumbo screen possibilities:
 //Beginning of the level, quadcorp logo and states which shape is going to be constructed, and countdown timer
@@ -31,38 +32,40 @@ using hf = HelperFunctions;
 //Ellipsoid possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 +z^2/c^2 = 1
     //2. Direct equation but denominators are solved
-    //3. Solve for actual a,b,c: x^2/a^2 + y^2/b^2 + z^2/c^2 = 1/16, 1/4, 4, 16 with solved denominators
-    //4. xy and xz traces
-    //5. xy and yz traces
-    //6. xz and yz traces
+    //3. xy and xz traces
+    //4. xy and yz traces
+    //5. xz and yz traces
 
 //Hyperboloid of one sheet possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 - z^2/c^2 = 1
-    //2. Solve for actual a,b,c: x^2/a^2 + y^2/b^2 - z^2/c^2 = 1/16, 1/4, 4, 16
+    //2. Direct equation but denominators are solved
     //3. xy and xz traces
     //4. xy and yz traces
     //5. xz and yz traces
 
 //Cone possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 - z^2/c^2 = 0
-    //2. xy and xz traces
-    //3. xy and yz traces
-    //4. xz and yz traces
+    //2. Direct equation but denominators are solved
+    //3. xy and xz traces
+    //4. xy and yz traces
+    //5. xz and yz traces
 
 //Hyperboloid of two sheets possible formats
     //1. Direct equation -x^2/a^2 - y^2/b^2 + z^2/c^2 = 1
-    //2. Solve for actual a,b,c: x^2/a^2 - y^2/b^2 + z^2/c^2 = 1/16, 1/4, 4, 16
+    //2. Direct equation but denominators are solved
     //3. Traces for pair of planes which contain axis of symmetry
 
 //Elliptic paraboloid possible formats
     //1. Direct equation x^2/a^2 + y^2/b^2 - z/c = 0
-    //2. Traces for pair of planes which contain axis of symmetry
+    //2. Direct equation but denominators are solved
+    //3. Traces for pair of planes which contain axis of symmetry (SKIPPED FOR NOW)
 
 //Hyperbolic paraboloid possible formats
     //1. Direct equation x^2/a^2 - y^2/b^2 - z/c = 0
-    //2. xy and xz traces
-    //3. xy and yz traces
-    //4. xz and yz traces
+    //2. Direct equation but denominators are solved
+    //2. xy and xz traces (SKIPPED FOR NOW)
+    //3. xy and yz traces (SKIPPED FOR NOW)
+    //4. xz and yz traces (SKIPPED FOR NOW)
 
 //The first and second shapes should be 1, then random for all other rounds
 
@@ -71,17 +74,17 @@ public class GameControllerScript : MonoBehaviour {
 
     //The game has several states
 
-    //Preround (0): a shape has just been finished and a new one started, or game has just started
-    //No shape (1): a fresh shape has been created and is going to the station
-    //Create shape (2): User must press buttons to generate shape
-    //Shape created (3): User got correct equation. Shape is moving to station 2.
-    //Scale shape (4): User must slide dials to scale shape
-    //Shape scaled (5): User got correct scaling. Shape is moving to station 3.
-    //Color shape (6): User must press buttons to color shape
-    //Shape colored (7): User got correct color. Shape is finished and moving out.
+    //0: Creation
+    //1: creation->station1 travel
+    //2: create equation
+    //3: station1->station2 travel
+    //4: find abc
+    //5: congratulations
+    //6: station2->destruction
+    //7: destruction and reset
 
     //Level and round variables
-    public static int levelNumber = 1;
+    public static int levelNumber = 2;
     public static int roundNumber = 1;
     private int roundState;
 
@@ -103,20 +106,73 @@ public class GameControllerScript : MonoBehaviour {
 
     //Jumbotron and images
     public GameObject jumbotron;
-    public TextMeshPro text1;
-    public TextMeshPro text2;
-    public TextMeshPro text3;
-    public TextMeshPro text4;
-    public TextMeshPro text5;
-    public TextMeshPro text6;
-    public TextMeshPro text7;
-    public TextMeshPro text8;
+    public TextMeshPro text_rightbigxp;
+    public TextMeshPro text_rightbigyq;
+    public TextMeshPro text_rightbigzr;
+    public TextMeshPro text_rightsmallp;
+    public TextMeshPro text_rightsmallq;
+    public TextMeshPro text_rightsmallr;
+    public TextMeshPro text_rightsmalls;
+
+    public TextMeshPro text_bigneg1;
+    public TextMeshPro text_bigneg2;
+    public TextMeshPro text_bigneg3;
+    public TextMeshPro text_bigpos2;
+    public TextMeshPro text_bigpos3;
+    public TextMeshPro text_smallneg1;
+    public TextMeshPro text_smallneg2;
+    public TextMeshPro text_smallneg3;
+    public TextMeshPro text_smallneg4;
+    public TextMeshPro text_smallpos2;
+    public TextMeshPro text_smallpos4;
+
+
+    
+    public Texture2D ellipsoid0;
     public Texture2D ellipsoid1;
     public Texture2D ellipsoid2;
     public Texture2D ellipsoid3;
     public Texture2D ellipsoid4;
+    public Texture2D ellipsoid5;
+    public Texture2D hypOfOneSheet0;
+    public Texture2D hypOfOneSheet1;
+    public Texture2D hypOfOneSheet2;
+    public Texture2D hypOfOneSheet3;
+    public Texture2D hypOfOneSheet4;
+    public Texture2D hypOfOneSheet5;
+    public Texture2D cone0;
+    public Texture2D cone1;
+    public Texture2D cone2;
+    public Texture2D cone3;
+    public Texture2D cone4;
+    public Texture2D cone5;
+    public Texture2D hypOfTwoSheets0;
+    public Texture2D hypOfTwoSheets1;
+    public Texture2D hypOfTwoSheets2;
+    public Texture2D hypOfTwoSheets3;
+    public Texture2D hypOfTwoSheets4;
+    public Texture2D hypOfTwoSheets5;
+    public Texture2D ellipticParaboloid0;
+    public Texture2D ellipticParaboloid11;
+    public Texture2D ellipticParaboloid12;
+    public Texture2D ellipticParaboloid13;
+    public Texture2D ellipticParaboloid21;
+    public Texture2D ellipticParaboloid22;
+    public Texture2D ellipticParaboloid23;
+    public Texture2D hyperbolicParaboloid0;
+    public Texture2D hyperbolicParaboloid11;
+    public Texture2D hyperbolicParaboloid12;
+    public Texture2D hyperbolicParaboloid13;
+    public Texture2D hyperbolicParaboloid21;
+    public Texture2D hyperbolicParaboloid22;
+    public Texture2D hyperbolicParaboloid23;
 
+    //Doors
+    public GameObject door1;
+    public GameObject door2;
 
+    //Ceiling (unhide when game starts)
+    public GameObject ceiling;
 
     //roundState 2
     public new Camera camera;
@@ -154,13 +210,19 @@ public class GameControllerScript : MonoBehaviour {
 
 
     //roundState 4
+    public GameObject station2;
+
     GameObject[] knobs = new GameObject[3];
     public GameObject knob1;
     public GameObject knob2;
     public GameObject knob3;
 
-    private float leftBound = -0.3f;
-    private float rightBound = 0.6f;
+    
+    Vector3 initialPosition = new Vector3(2.6f, 2.3f, 3.5f);
+    Vector3 finalPosition = new Vector3(3.6244f, 2.3f, 3.0162f);
+
+    private float leftBound = 0.0f;
+    private float rightBound = 1.12f;
     private float knobIncrement;
 
     private GameObject selectedKnobInstance;
@@ -169,10 +231,12 @@ public class GameControllerScript : MonoBehaviour {
 
     private int[] knobSelections = {1,1,1};
 
+    //roundState 5
+    private float roundState5EndTime;
+
 
     // Start is called before the first frame update
     void Start() {
-        Debug.Log(levelNumber);
         //Set roundstate to preround
         roundState = 0; 
         //Reset timer and timing mechanism
@@ -180,6 +244,8 @@ public class GameControllerScript : MonoBehaviour {
         timeWhenLastShapeFinished = 0;
         //Initialize selectedKnobInstance
         selectedKnobInstance = knob1;
+        //Unhide ceiling
+        ceiling.SetActive(true);
         //Place buttons and knobs in an array
         buttons[0,0] = x2;
         buttons[0,1] = nx2;
@@ -206,7 +272,35 @@ public class GameControllerScript : MonoBehaviour {
 
         //Update jumbotron with starting screen
         jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
+
+        switch(levelNumber) {
+            case 1:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid0;
+                break;
+            case 2:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet0;
+                break;
+            case 3:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = cone0;
+                break;
+            case 4:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfTwoSheets0;
+                break;
+            case 5:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipticParaboloid0;
+                break;
+            case 6:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = hyperbolicParaboloid0;
+                break;
+            default:
+                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid0;
+                break;
+        }
         resetAllText();
+
+        
+
+
     }
 
     void updateJumbotron(int inputShape, (int, int, int, int, int, int, int) inputShapeData, int inputRoundNumber) {
@@ -215,46 +309,121 @@ public class GameControllerScript : MonoBehaviour {
         resetAllText();
         switch (inputShape) {
             case 1:
+                //Ellipsoid
                 //Determine which question type will be asked
                 questionType = Random.Range(1,5);
-                if (inputRoundNumber == 1) {questionType = 4;}
-
+                if (inputRoundNumber == 1 || inputRoundNumber == 2) {questionType = 1;}
 
                 switch (questionType) {
                     case 1:
                         jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
                         //Set a, b, c
-                        text1.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text2.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text3.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
                         break;
                     case 2:
                         jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid2;
                         //Set a, b, c
-                        text1.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
-                        text2.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
-                        text3.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
+                        text_rightbigxp.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
+                        text_rightbigyq.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
+                        text_rightbigzr.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
                         break;
                     case 3:
                         jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid3;
-                        //Randomly pick a number from [2, 3, 4, 8]
-                        int[] numbersArr = {2, 3, 4, 8};
-                        int factor = numbersArr[Random.Range(0, numbersArr.Length)];
-                        //Set a, b, c
-                        text1.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item5)).ToString();
-                        text2.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item6)).ToString();
-                        text3.GetComponent<TextMeshPro>().text = (factor*hf.indexToScale(inputShapeData.Item7)).ToString();
-                        text4.GetComponent<TextMeshPro>().text = factor.ToString();
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
                         break;
                     case 4:
                         jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid4;
-                        //Set a, b, c
-                        text5.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text6.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text7.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text8.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
                         break;
+                    case 5:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid5;
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
+                }
+            break;
+            case 2:
+                //Hyperboloid of one sheet
+                //Determine which question type will be asked
+                questionType = Random.Range(1,5);
+                if (inputRoundNumber == 1 || inputRoundNumber == 2) {questionType = 1;}
 
+                switch (questionType) {
+                    case 1:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet1;
+                        //Set a, b, c
+                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        //set signs
+                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
+                            text_bigneg1.GetComponent<TextMeshPro>().text = "-";
+                            //Set x position to -4.1
+                            text_bigneg1.GetComponent<TextMeshPro>().transform.position = new Vector3(-4.1f, text_bigneg1.GetComponent<TextMeshPro>().transform.position.y, text_bigneg1.GetComponent<TextMeshPro>().transform.position.z);
+                        }
+                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
+                            text_bigneg2.GetComponent<TextMeshPro>().text = "-";
+                            //Set x position to -2.8
+                            text_bigneg2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.8f, text_bigneg2.GetComponent<TextMeshPro>().transform.position.y, text_bigneg2.GetComponent<TextMeshPro>().transform.position.z);
+                        } else {
+                            text_bigpos2.GetComponent<TextMeshPro>().text = "+";
+                            //Set x position to -2.78
+                            text_bigpos2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.78f, text_bigpos2.GetComponent<TextMeshPro>().transform.position.y, text_bigpos2.GetComponent<TextMeshPro>().transform.position.z);
+                        }
+                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
+                            text_bigneg3.GetComponent<TextMeshPro>().text = "-";
+                            //Set x position to -1.45
+                            text_bigneg3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.45f, text_bigneg3.GetComponent<TextMeshPro>().transform.position.y, text_bigneg3.GetComponent<TextMeshPro>().transform.position.z);
+                        } else {
+                            text_bigpos3.GetComponent<TextMeshPro>().text = "+";
+                            //Set x position to -1.429
+                            text_bigpos3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.429f, text_bigpos3.GetComponent<TextMeshPro>().transform.position.y, text_bigpos3.GetComponent<TextMeshPro>().transform.position.z);
+                        }
+                        break;
+                    case 2:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet2;
+                        //Set a, b, c
+                        text_rightbigxp.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
+                        text_rightbigyq.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
+                        text_rightbigzr.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
+                        break;
+                    case 3:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet3;
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
+                    case 4:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet4;
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
+                    case 5:
+                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet5;
+                        //Set p, q, r, s
+                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
+                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
+                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
+                        break;
                 }
             break;
 
@@ -263,14 +432,25 @@ public class GameControllerScript : MonoBehaviour {
     }
 
     void resetAllText() {
-        text1.GetComponent<TextMeshPro>().text = "";
-        text2.GetComponent<TextMeshPro>().text = "";
-        text3.GetComponent<TextMeshPro>().text = "";
-        text4.GetComponent<TextMeshPro>().text = "";
-        text5.GetComponent<TextMeshPro>().text = "";
-        text6.GetComponent<TextMeshPro>().text = "";
-        text7.GetComponent<TextMeshPro>().text = "";
-        text8.GetComponent<TextMeshPro>().text = "";
+        text_rightbigxp.GetComponent<TextMeshPro>().text = "";
+        text_rightbigyq.GetComponent<TextMeshPro>().text = "";
+        text_rightbigzr.GetComponent<TextMeshPro>().text = "";
+        text_rightsmallp.GetComponent<TextMeshPro>().text = "";
+        text_rightsmallq.GetComponent<TextMeshPro>().text = "";
+        text_rightsmallr.GetComponent<TextMeshPro>().text = "";
+        text_rightsmalls.GetComponent<TextMeshPro>().text = "";
+
+        text_bigneg1.GetComponent<TextMeshPro>().text = "";
+        text_bigneg2.GetComponent<TextMeshPro>().text = "";
+        text_bigneg3.GetComponent<TextMeshPro>().text = "";
+        text_bigpos2.GetComponent<TextMeshPro>().text = "";
+        text_bigpos3.GetComponent<TextMeshPro>().text = "";
+        text_smallneg1.GetComponent<TextMeshPro>().text = "";
+        text_smallneg2.GetComponent<TextMeshPro>().text = "";
+        text_smallneg3.GetComponent<TextMeshPro>().text = "";
+        text_smallneg4.GetComponent<TextMeshPro>().text = "";
+        text_smallpos2.GetComponent<TextMeshPro>().text = "";
+        text_smallpos4.GetComponent<TextMeshPro>().text = "";
     }
 
 
@@ -280,7 +460,7 @@ public class GameControllerScript : MonoBehaviour {
 
         if (roundState == 0 && time-timeWhenLastShapeFinished > 3) {
             product = emptyAxes;
-            product.transform.position = new Vector3(-5, 2, 9);
+            product.transform.position = new Vector3(-5, 1, 14);
 
             //Generate a new desired shape
             //If level is 1...6, desired shape should be of type levelNumber
@@ -297,7 +477,6 @@ public class GameControllerScript : MonoBehaviour {
             desiredShapeEquation = new int[] {desiredShapeData.Item1, desiredShapeData.Item2, desiredShapeData.Item3, desiredShapeData.Item4};
             desiredShapeSize = new int[] {desiredShapeData.Item5, desiredShapeData.Item6, desiredShapeData.Item7};
 
-            Debug.Log(desiredShapeData);
 
             //Update jumbotron with new desired shape
             updateJumbotron(desiredShape, desiredShapeData, roundNumber);
@@ -310,16 +489,24 @@ public class GameControllerScript : MonoBehaviour {
 
             //Conveyor belt moves to station 1
             if (product.position.z > 5) {
-                product.position = new Vector3(-5, 2, product.position.z - 1 * Time.deltaTime * conveyorSpeed);
-            } else if (product.position.x < -2) {
-                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 2, 5);
+                product.position = new Vector3(-5, 1, product.position.z - 1 * Time.deltaTime * conveyorSpeed);
+            } else if (product.position.x < -1) {
+                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 1, 5);
             } else {
-                product.position = new Vector3(-2, 2, 5);
+                product.position = new Vector3(-1, 1, 5);
                 roundState = 2;
             }
 
-        } else if (roundState == 2) {
+            //Open left door
+            if (product.position.z > 8) {
+                //Hide door
+                door1.GetComponent<Renderer>().enabled = false;
+            } else if (product.position.z < 8) {
+                //Show door
+                door1.GetComponent<Renderer>().enabled = true;
+            }
 
+        } else if (roundState == 2) {
 
             int buttonSelection = -1;
 
@@ -408,10 +595,10 @@ public class GameControllerScript : MonoBehaviour {
                 }
             }
         } else if (roundState == 3) {
-            if (product.position.x < 2) {
-                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 2, 5);
+            if (product.position.x < 1) {
+                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 1, 5);
             } else {
-                product.position = new Vector3(2, 2, 5);
+                product.position = new Vector3(1, 1, 5);
                 roundState = 4;
             }
         } else if (roundState == 4) {
@@ -440,30 +627,38 @@ public class GameControllerScript : MonoBehaviour {
                 float xPos = -1;
                 Ray ray = new Ray(camera.transform.position, camera.transform.forward);
                 RaycastHit hit;
+                //float majorDistance = hf.xzDistance(initialPosition, finalPosition);
+
                 if (Physics.Raycast(ray, out hit)) {
-                    xPos = hit.point.x;
+                    float zeroOneDistance = hf.distanceProportion(initialPosition, hit.point, finalPosition);
+                    //Debug.Log(zeroOneDistance);
+                    xPos = Mathf.Lerp(leftBound, rightBound, zeroOneDistance);
                 }
+                
 
                 if (xPos < leftBound) {
                     xPos = leftBound;
+                    selectedKnob = -1;
                 } else if (xPos > rightBound) {
                     xPos = rightBound;
+                    selectedKnob = -1;
                 }
+                
 
-                selectedKnobInstance.transform.position = new Vector3(xPos, selectedKnobInstance.transform.position.y, selectedKnobInstance.transform.position.z);
+                selectedKnobInstance.transform.localPosition = new Vector3(xPos, selectedKnobInstance.transform.localPosition.y, selectedKnobInstance.transform.localPosition.z);
 
                 //Check if user deselected a dial
                 if (Input.GetButtonUp("Fire1")) {
                 
                     //Snap recently deselected knob to its increment
-                    selectedKnobInstance.transform.position = new Vector3(Mathf.Round(selectedKnobInstance.transform.position.x / knobIncrement) * knobIncrement, selectedKnobInstance.transform.position.y, selectedKnobInstance.transform.position.z);
-                    knobSelections[selectedKnob] = (int)Mathf.Round((selectedKnobInstance.transform.position.x - leftBound) / knobIncrement);
+                    selectedKnobInstance.transform.localPosition = new Vector3(Mathf.Round(selectedKnobInstance.transform.localPosition.x / knobIncrement) * knobIncrement, selectedKnobInstance.transform.localPosition.y, selectedKnobInstance.transform.localPosition.z);
+                    knobSelections[selectedKnob] = (int)Mathf.Round((selectedKnobInstance.transform.localPosition.x - leftBound) / knobIncrement);
                     done = true;
                 
                 }
 
                 //scale the product to match the knob
-                float scale = (selectedKnobInstance.transform.position.x-leftBound)/(2*knobIncrement) + 0.5f;
+                float scale = (selectedKnobInstance.transform.localPosition.x-leftBound)/(2*knobIncrement) + 0.5f;
                 Transform shape = product.Find("Shape(Clone)");
 
                 if (selectedKnob == 0) {
@@ -484,21 +679,42 @@ public class GameControllerScript : MonoBehaviour {
                 if (hf.areIntArraysEqual(knobSelections, desiredShapeSize)) {
                     //Set round state to 5
                     roundState = 5;
+                    roundState5EndTime = Time.time;
                 }
             }
 
         } else if (roundState == 5) {
-            //Move finished product out
-            if (product.position.x < 5) {
-                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 2, 5);
-            } else if (product.position.z < 9) {
-                product.position = new Vector3(5, 2, product.position.z + 1 * Time.deltaTime * conveyorSpeed);
-            } else {
-                product.position = new Vector3(5, 2, 9);
+            //Set knobs to green material
+            for (int i = 0; i < knobs.Length; i++) {
+                knobs[i].GetComponent<Renderer>().material = buttonSelectedMaterial;
+            }
+
+            //Wait 2 seconds
+            if (Time.time - roundState5EndTime > 2) {
+                //Set round state to 6
                 roundState = 6;
             }
 
         } else if (roundState == 6) {
+            //Move finished product out
+            if (product.position.x < 5) {
+                product.position = new Vector3(product.position.x + 1 * Time.deltaTime * conveyorSpeed, 1, 5);
+            } else if (product.position.z < 14) {
+                product.position = new Vector3(5, 1, product.position.z + 1 * Time.deltaTime * conveyorSpeed);
+            } else {
+                product.position = new Vector3(5, 1, 14);
+                roundState = 7;
+            }
+
+            if (product.position.z < 12) {
+                //Hide door
+                door2.GetComponent<Renderer>().enabled = false;
+            } else if (product.position.z > 12) {
+                //Show door
+                door2.GetComponent<Renderer>().enabled = true;
+            }
+
+        } else if (roundState == 7) {
             //Destroy shape
             if (product.Find("Shape(Clone)") != null) {
                 Destroy(product.Find("Shape(Clone)").gameObject);
@@ -507,8 +723,9 @@ public class GameControllerScript : MonoBehaviour {
 
             //Reset buttons and dials
             for (int i = 0; i < knobs.Length; i++) {
-                knobs[i].transform.position = new Vector3(leftBound+knobIncrement, knobs[i].transform.position.y, knobs[i].transform.position.z);
+                knobs[i].transform.localPosition = new Vector3(leftBound+knobIncrement, knobs[i].transform.localPosition.y, knobs[i].transform.localPosition.z);
                 knobSelections[i] = 1;
+                knobs[i].GetComponent<Renderer>().material = buttonDeselectedMaterial;
             }
             for (int i = 0; i < equationSelections.Length; i++) {
                 equationSelections[i] = -1;
@@ -518,6 +735,7 @@ public class GameControllerScript : MonoBehaviour {
                     buttons[i,j].GetComponent<Renderer>().material = buttonDeselectedMaterial;
                 }
             }
+
             //Update roundNumber
             roundNumber++;
 

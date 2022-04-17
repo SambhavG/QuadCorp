@@ -214,4 +214,30 @@ public class HelperFunctions
         }
     }
 
+    public static Vector2 vector2Project(Vector2 v1, Vector2 v2) {
+        return v1.normalized * Vector2.Dot(v1, v2);
+
+    }
+
+    public static float distanceProportion(Vector3 a, Vector3 b, Vector3 c) {
+        Vector2 a2 = new Vector2(a.x, a.z);
+        Vector2 b2 = new Vector2(b.x, b.z);
+        Vector2 c2 = new Vector2(c.x, c.z);
+        Debug.Log(b2);
+
+        Vector2 atoc = c2-a2;
+        Vector2 atob = b2-a2;
+
+        //Project atob onto atoc
+        Vector2 projection = vector2Project(atob, atoc);
+        float dist = projection.magnitude;
+        //If projection is in the opposite direction of atoc, then the distance is negative
+        if (Vector2.Dot(projection, atoc) < 0 || b2.x < a2.x) {
+            dist = -dist;
+            Debug.Log("Negative");
+        }
+
+        return dist/atoc.magnitude;
+    }
+
 }
