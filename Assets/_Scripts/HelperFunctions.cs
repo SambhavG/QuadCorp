@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HelperFunctions
@@ -238,6 +239,22 @@ public class HelperFunctions
         }
 
         return dist/atoc.magnitude;
+    }
+
+    public static void changeTextX(TextMeshPro text, float x) {
+        text.GetComponent<TextMeshPro>().transform.position = new Vector3(x, text.GetComponent<TextMeshPro>().transform.position.y, text.GetComponent<TextMeshPro>().transform.position.z);
+        return;
+
+    }
+
+    public static void setPlus(TextMeshPro text) {
+        text.GetComponent<TextMeshPro>().text = "+";
+        return;
+    }
+
+    public static void setMinus(TextMeshPro text) {
+        text.GetComponent<TextMeshPro>().text = "-";
+        return;
     }
 
 }

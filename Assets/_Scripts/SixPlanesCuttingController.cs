@@ -37,7 +37,7 @@ public class SixPlanesCuttingController : MonoBehaviour {
         UpdateShaderProperties();
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || UNITY_STANDALONE
     private void Update()
     {
         UpdateShaderProperties();
