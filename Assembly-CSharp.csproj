@@ -38,7 +38,6 @@
   <ItemGroup>
      <Compile Include="Assets\Mobile\Scripts\VirtualInputs\UIVirtualButton.cs" />
      <Compile Include="Assets\InputSystem\StarterAssetsInputs.cs" />
-     <Compile Include="Assets\Submarine project\cross-section-shader-main\CrossSectionShader\Assets\Scripts\SixPlanesCuttingControllerCopy.cs" />
      <Compile Include="Assets\MainMenu.cs" />
      <Compile Include="Assets\_Scripts\FirstPersonController.cs" />
      <Compile Include="Assets\Mobile\Scripts\CanvasInputs\UICanvasControllerInput.cs" />
@@ -55,7 +54,7 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-     <None Include="Assets\Submarine project\cross-section-shader-main\CrossSectionShader\Assets\Shaders\GeneratedFromGraph-CrossSectionPlane.shader" />
+     <None Include="Assets\_Materials\Cross section shaders\GeneratedFromGraph-CrossSectionPlane.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
@@ -66,9 +65,8 @@
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-     <None Include="Assets\Submarine project\cross-section-shader-main\CrossSectionShader\Assets\Shaders\GeneratedFromGraph-CrossSection.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-     <None Include="Assets\GeneratedFromGraph-CrossSectionShaderGraph.shader" />
+     <None Include="Assets\_Materials\Cross section shaders\GeneratedFromGraph-CrossSectionShaderGraph.shader" />
      <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
