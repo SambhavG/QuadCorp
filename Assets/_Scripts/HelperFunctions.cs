@@ -241,10 +241,19 @@ public class HelperFunctions
         return dist/atoc.magnitude;
     }
 
-    public static void changeTextX(TextMeshPro text, float x) {
-        text.GetComponent<TextMeshPro>().transform.position = new Vector3(x, text.GetComponent<TextMeshPro>().transform.position.y, text.GetComponent<TextMeshPro>().transform.position.z);
+    public static void setTexture(GameObject obj, Texture2D textureInput) {
+        obj.GetComponent<Renderer>().material.mainTexture = textureInput;
         return;
+    }
 
+    public static void setTextToNum(TextMeshPro text, int num) {
+        text.GetComponent<TextMeshPro>().text = indexToScale(num).ToString();
+        return;
+    }
+
+    public static void setTextToSquareNum(TextMeshPro text, int num) {
+        text.GetComponent<TextMeshPro>().text = Mathf.Pow(indexToScale(num), 2).ToString();
+        return;
     }
 
     public static void setPlus(TextMeshPro text) {
@@ -255,6 +264,18 @@ public class HelperFunctions
     public static void setMinus(TextMeshPro text) {
         text.GetComponent<TextMeshPro>().text = "-";
         return;
+    }
+
+    public static void clear(TextMeshPro text) {
+        text.GetComponent<TextMeshPro>().text = "";
+        return;
+    }
+
+    public static bool equals1Or3(int n) {
+        if (n == 1 || n == 3) {
+            return true;
+        }
+        return false;
     }
 
 }

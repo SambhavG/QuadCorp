@@ -9,11 +9,9 @@ using hf = HelperFunctions;
 
 
 //TODO order of things:
-//Add the rest of the level screens
 //Add scoring and stars system
 //Add a pause menu and level complete screen
 //Add instructions
-//Fix camera movement
 
 
 
@@ -284,25 +282,25 @@ public class GameControllerScript : MonoBehaviour {
 
         switch(levelNumber) {
             case 1:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid0;
+                hf.setTexture(jumbotron, ellipsoid0);
                 break;
             case 2:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet0;
+                hf.setTexture(jumbotron, hypOfOneSheet0);
                 break;
             case 3:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = cone0;
+                hf.setTexture(jumbotron, cone0);
                 break;
             case 4:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfTwoSheets0;
+                hf.setTexture(jumbotron, hypOfTwoSheets0);
                 break;
             case 5:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipticParaboloid0;
+                hf.setTexture(jumbotron, ellipticParaboloid0);
                 break;
             case 6:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = hyperbolicParaboloid0;
+                hf.setTexture(jumbotron, hyperbolicParaboloid0);
                 break;
             default:
-                jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid0;
+                hf.setTexture(jumbotron, ellipsoid0);
                 break;
         }
         resetAllText();
@@ -316,399 +314,307 @@ public class GameControllerScript : MonoBehaviour {
 
         int questionType;
         resetAllText();
-        switch (inputShape) {
-            case 1:
-                //Ellipsoid
-                //Determine which question type will be asked
-                questionType = Random.Range(1,5);
-                if (inputRoundNumber == 1 || inputRoundNumber == 2) {questionType = 1;}
 
-                switch (questionType) {
-                    case 1:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        break;
-                    case 2:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid2;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
-                        break;
-                    case 3:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid3;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        break;
-                    case 4:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid4;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        break;
-                    case 5:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid5;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        break;
-                }
-                break;
-            case 2:
-                //Hyperboloid of one sheet
-                //Determine which question type will be asked
-                questionType = Random.Range(1,5);
-                if (inputRoundNumber == 1 || inputRoundNumber == 2) {questionType = 1;}
+        if (inputShape <= 4) {
+            questionType = Random.Range(1,5);
+            if (inputRoundNumber <= 2) {questionType = 1;}
 
-                switch (questionType) {
-                    case 1:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet1;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        //set signs
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            text_bigneg1.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -4.1
-                            text_bigneg1.GetComponent<TextMeshPro>().transform.position = new Vector3(-4.1f, text_bigneg1.GetComponent<TextMeshPro>().transform.position.y, text_bigneg1.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            text_bigneg2.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -2.8
-                            text_bigneg2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.8f, text_bigneg2.GetComponent<TextMeshPro>().transform.position.y, text_bigneg2.GetComponent<TextMeshPro>().transform.position.z);
-                        } else {
-                            text_bigpos2.GetComponent<TextMeshPro>().text = "+";
-                            //Set x position to -2.78
-                            text_bigpos2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.78f, text_bigpos2.GetComponent<TextMeshPro>().transform.position.y, text_bigpos2.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            text_bigneg3.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -1.45
-                            text_bigneg3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.45f, text_bigneg3.GetComponent<TextMeshPro>().transform.position.y, text_bigneg3.GetComponent<TextMeshPro>().transform.position.z);
-                        } else {
-                            text_bigpos3.GetComponent<TextMeshPro>().text = "+";
-                            //Set x position to -1.429
-                            text_bigpos3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.429f, text_bigpos3.GetComponent<TextMeshPro>().transform.position.y, text_bigpos3.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        break;
-                    case 2:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet2;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item5), 2).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item6), 2).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = Mathf.Pow(hf.indexToScale(inputShapeData.Item7), 2).ToString();
-                        //set signs
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            text_bigneg1.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -4.1
-                            text_bigneg1.GetComponent<TextMeshPro>().transform.position = new Vector3(-4.1f, text_bigneg1.GetComponent<TextMeshPro>().transform.position.y, text_bigneg1.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            text_bigneg2.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -2.8
-                            text_bigneg2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.8f, text_bigneg2.GetComponent<TextMeshPro>().transform.position.y, text_bigneg2.GetComponent<TextMeshPro>().transform.position.z);
-                        } else {
-                            text_bigpos2.GetComponent<TextMeshPro>().text = "+";
-                            //Set x position to -2.78
-                            text_bigpos2.GetComponent<TextMeshPro>().transform.position = new Vector3(-2.78f, text_bigpos2.GetComponent<TextMeshPro>().transform.position.y, text_bigpos2.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            text_bigneg3.GetComponent<TextMeshPro>().text = "-";
-                            //Set x position to -1.45
-                            text_bigneg3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.45f, text_bigneg3.GetComponent<TextMeshPro>().transform.position.y, text_bigneg3.GetComponent<TextMeshPro>().transform.position.z);
-                        } else {
-                            text_bigpos3.GetComponent<TextMeshPro>().text = "+";
-                            //Set x position to -1.429
-                            text_bigpos3.GetComponent<TextMeshPro>().transform.position = new Vector3(-1.429f, text_bigpos3.GetComponent<TextMeshPro>().transform.position.y, text_bigpos3.GetComponent<TextMeshPro>().transform.position.z);
-                        }
-                        break;
-                    case 3:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet3;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg2, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg2);
-                            hf.changeTextX(text_smallneg2, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
-
-                        break;
-                    case 4:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet4;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg2);
-                            hf.changeTextX(text_smallneg2, -2.44f);
-                            
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -3.47f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
-                        break;
-                    case 5:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = hypOfOneSheet5;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -2.44f);
-                            
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -2.44f);
-
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
-                        break;
-                }
-                break;
-            case 3:
-                //Cone
-                //Determine which question type will be asked
-                questionType = Random.Range(1,5);
-                if (inputRoundNumber == 1 || inputRoundNumber == 2) {questionType = 1;}
-
+            //Set background
+            if (inputShape == 1) {
                 switch(questionType) {
                     case 1:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = cone1;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        //set signs
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_bigneg1);
-                            hf.changeTextX(text_bigneg1, -4.1f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_bigneg2);
-                            hf.changeTextX(text_bigneg2, -2.8f);
-                        } else {
-                            hf.setPlus(text_bigpos2);
-                            hf.changeTextX(text_bigpos2, -2.8f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_bigneg3);
-                            hf.changeTextX(text_bigneg3, -1.45f);
-                        } else {
-                            hf.setPlus(text_bigpos3);
-                            hf.changeTextX(text_bigpos3, -1.45f);
-                        }
+                        hf.setTexture(jumbotron, ellipsoid1);
                         break;
                     case 2:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = cone2;
-                        //Set a, b, c
-                        text_rightbigxp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightbigyq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightbigzr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        //set signs
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_bigneg1);
-                            hf.changeTextX(text_bigneg1, -4.1f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_bigneg2);
-                            hf.changeTextX(text_bigneg2, -2.8f);
-                        } else {
-                            hf.setPlus(text_bigpos2);
-                            hf.changeTextX(text_bigpos2, -2.8f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_bigneg3);
-                            hf.changeTextX(text_bigneg3, -1.45f);
-                        } else {
-                            hf.setPlus(text_bigpos3);
-                            hf.changeTextX(text_bigpos3, -1.45f);
-                        }
+                        hf.setTexture(jumbotron, ellipsoid2);
                         break;
                     case 3:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = cone3;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg2, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg2);
-                            hf.changeTextX(text_smallneg2, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
-
+                        hf.setTexture(jumbotron, ellipsoid3);
                         break;
                     case 4:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = cone4;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg2);
-                            hf.changeTextX(text_smallneg2, -2.44f);
-                            
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -3.47f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
+                        hf.setTexture(jumbotron, ellipsoid4);
                         break;
                     case 5:
-                        jumbotron.GetComponent<Renderer>().material.mainTexture = cone5;
-                        //Set p, q, r, s
-                        text_rightsmallp.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item5).ToString();
-                        text_rightsmallq.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        text_rightsmallr.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item6).ToString();
-                        text_rightsmalls.GetComponent<TextMeshPro>().text = hf.indexToScale(inputShapeData.Item7).ToString();
-                        if (inputShapeData.Item1 == 1 || inputShapeData.Item1 == 3) {
-                            hf.setMinus(text_smallneg1);
-                            hf.changeTextX(text_smallneg1, -3.47f);
-                        }
-                        if (inputShapeData.Item2 == 1 || inputShapeData.Item2 == 3) {
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -2.44f);
-                            
-                        }
-                        if (inputShapeData.Item3 == 1 || inputShapeData.Item3 == 3) {
-                            hf.setMinus(text_smallneg3);
-                            hf.changeTextX(text_smallneg3, -2.44f);
-
-                            hf.setMinus(text_smallneg4);
-                            hf.changeTextX(text_smallneg4, -2.44f);
-                        } else {
-                            hf.setPlus(text_smallpos2);
-                            hf.changeTextX(text_smallpos2, -2.44f);
-
-                            hf.setPlus(text_smallpos4);
-                            hf.changeTextX(text_smallpos4, -2.44f);
-                        }
+                        hf.setTexture(jumbotron, ellipsoid5);
                         break;
-
                 }
-                break;
+            } else if (inputShape == 2) {
+                switch(questionType) {
+                    case 1:
+                        hf.setTexture(jumbotron, hypOfOneSheet1);
+                        break;
+                    case 2:
+                        hf.setTexture(jumbotron, hypOfOneSheet2);
+                        break;
+                    case 3:
+                        hf.setTexture(jumbotron, hypOfOneSheet3);
+                        break;
+                    case 4:
+                        hf.setTexture(jumbotron, hypOfOneSheet4);
+                        break;
+                    case 5:
+                        hf.setTexture(jumbotron, hypOfOneSheet5);
+                        break;
+                }
+            } else if (inputShape == 3) {
+                switch(questionType) {
+                    case 1:
+                        hf.setTexture(jumbotron, cone1);
+                        break;
+                    case 2:
+                        hf.setTexture(jumbotron, cone2);
+                        break;
+                    case 3:
+                        hf.setTexture(jumbotron, cone3);
+                        break;
+                    case 4:
+                        hf.setTexture(jumbotron, cone4);
+                        break;
+                    case 5:
+                        hf.setTexture(jumbotron, cone5);
+                        break;
+                }
+            } else if (inputShape == 4) {
+                switch(questionType) {
+                    case 1:
+                        hf.setTexture(jumbotron, hypOfTwoSheets1);
+                        break;
+                    case 2:
+                        hf.setTexture(jumbotron, hypOfTwoSheets2);
+                        break;
+                    case 3:
+                        hf.setTexture(jumbotron, hypOfTwoSheets3);
+                        break;
+                    case 4:
+                        hf.setTexture(jumbotron, hypOfTwoSheets4);
+                        break;
+                    case 5:
+                        hf.setTexture(jumbotron, hypOfTwoSheets5);
+                        break;
+                }
+            }
 
+            //Set +/- and nums on background
+            switch (questionType) {
+                case 1:
+                    //Set a, b, c
+                    hf.setTextToNum(text_rightbigxp, inputShapeData.Item5);
+                    hf.setTextToNum(text_rightbigyq, inputShapeData.Item6);
+                    hf.setTextToNum(text_rightbigzr, inputShapeData.Item7);
+                    //set signs
+                    hf.setPlus(text_bigpos2);
+                    hf.setPlus(text_bigpos3);
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setMinus(text_bigneg1);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setMinus(text_bigneg2);
+                        hf.clear(text_bigpos2);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setMinus(text_bigneg3);
+                        hf.clear(text_bigpos3);
+                    }
+                    break;
+                case 2:
+                    //Set a, b, c
+                    hf.setTextToSquareNum(text_rightbigxp, inputShapeData.Item5);
+                    hf.setTextToSquareNum(text_rightbigyq, inputShapeData.Item6);
+                    hf.setTextToSquareNum(text_rightbigzr, inputShapeData.Item7);
+                    //set signs
+                    hf.setPlus(text_bigpos2);
+                    hf.setPlus(text_bigpos3);
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setMinus(text_bigneg1);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setMinus(text_bigneg2);
+                        hf.clear(text_bigpos2);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setMinus(text_bigneg3);
+                        hf.clear(text_bigpos3);
+                    }
+                    break;
+                case 3:
+                    //Set p, q, r, s
+                    hf.setTextToNum(text_rightsmallp, inputShapeData.Item5);
+                    hf.setTextToNum(text_rightsmallq, inputShapeData.Item6);
+                    hf.setTextToNum(text_rightsmallr, inputShapeData.Item5);
+                    hf.setTextToNum(text_rightsmalls, inputShapeData.Item7);
+                    //set signs
+                    hf.setPlus(text_smallpos2);
+                    hf.setPlus(text_smallpos4);
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setMinus(text_smallneg1);
+                        hf.setMinus(text_smallneg3);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setMinus(text_smallneg2);
+                        hf.clear(text_smallpos2);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setMinus(text_smallneg4);
+                        hf.clear(text_smallpos4);
+                    }
+                    break;
+                case 4:
+                    //Set p, q, r, s
+                    hf.setTextToNum(text_rightsmallp, inputShapeData.Item5);
+                    hf.setTextToNum(text_rightsmallq, inputShapeData.Item6);
+                    hf.setTextToNum(text_rightsmallr, inputShapeData.Item6);
+                    hf.setTextToNum(text_rightsmalls, inputShapeData.Item7);
+                    //set signs
+                    hf.setPlus(text_smallpos2);
+                    hf.setPlus(text_smallpos4);
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setMinus(text_smallneg1);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setMinus(text_smallneg2);
+                        hf.setMinus(text_smallneg3);
+                        hf.clear(text_smallpos2);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setMinus(text_smallneg4);
+                        hf.clear(text_smallpos4);
+                    }
+                    break;
+                case 5:
+                    //Set p, q, r, s
+                    hf.setTextToNum(text_rightsmallp, inputShapeData.Item5);
+                    hf.setTextToNum(text_rightsmallq, inputShapeData.Item7);
+                    hf.setTextToNum(text_rightsmallr, inputShapeData.Item6);
+                    hf.setTextToNum(text_rightsmalls, inputShapeData.Item7);
+                    //set signs
+                    hf.setPlus(text_smallpos2);
+                    hf.setPlus(text_smallpos4);
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setMinus(text_smallneg1);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setMinus(text_smallneg3);
+                    }
+                    if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setMinus(text_smallneg2);
+                        hf.setMinus(text_smallneg4);
+                        hf.clear(text_smallpos2);
+                        hf.clear(text_smallpos4);
+                    }
+                    break;
+            }
+        } else {
+            //Shape is elliptic paraboloid or hyperbolic paraboloid
+            questionType = Random.Range(1, 2);
+            if (roundNumber <= 2) {
+                questionType = 1;
+            }
 
+            //Set background
+            //Based on inputShape, questionType, and Item1/2/3
+            if (inputShape == 5) {
+                //Elliptic paraboloid
+                if (questionType == 1) {
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid11);
+                    } else if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid12);
+                    } else if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid13);
+                    }
+                } else if (questionType == 2) {
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid21);
+                    } else if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid22);
+                    } else if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setTexture(jumbotron, ellipticParaboloid23);
+                    }
+                }
+            } else if (inputShape == 6) {
+                //Hyperbolic paraboloid
+                if (questionType == 1) {
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid11);
+                    } else if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid12);
+                    } else if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid13);
+                    }
+                } else if (questionType == 2) {
+                    if (hf.equals1Or3(inputShapeData.Item1)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid21);
+                    } else if (hf.equals1Or3(inputShapeData.Item2)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid22);
+                    } else if (hf.equals1Or3(inputShapeData.Item3)) {
+                        hf.setTexture(jumbotron, hyperbolicParaboloid23);
+                    }
+                }
+            }
 
-
-
+            if (questionType == 1) {
+                //Set a, b, c
+                hf.setTextToNum(text_rightbigxp, inputShapeData.Item5);
+                hf.setTextToNum(text_rightbigyq, inputShapeData.Item6);
+                hf.setTextToNum(text_rightbigzr, inputShapeData.Item7);
+                //set signs
+                hf.setPlus(text_bigpos2);
+                hf.setPlus(text_bigpos3);
+                if (hf.equals1Or3(inputShapeData.Item1)) {
+                    hf.setMinus(text_bigneg1);
+                }
+                if (hf.equals1Or3(inputShapeData.Item2)) {
+                    hf.setMinus(text_bigneg2);
+                    hf.clear(text_bigpos2);
+                }
+                if (hf.equals1Or3(inputShapeData.Item3)) {
+                    hf.setMinus(text_bigneg3);
+                    hf.clear(text_bigpos3);
+                }
+            } else if (questionType == 2) {
+                //set p, q, r
+                hf.setTextToSquareNum(text_rightbigxp, inputShapeData.Item5);
+                hf.setTextToSquareNum(text_rightbigyq, inputShapeData.Item6);
+                hf.setTextToSquareNum(text_rightbigzr, inputShapeData.Item7);
+                //set signs
+                hf.setPlus(text_bigpos2);
+                hf.setPlus(text_bigpos3);
+                if (hf.equals1Or3(inputShapeData.Item1)) {
+                    hf.setMinus(text_bigneg1);
+                }
+                if (hf.equals1Or3(inputShapeData.Item2)) {
+                    hf.setMinus(text_bigneg2);
+                    hf.clear(text_bigpos2);
+                }
+                if (hf.equals1Or3(inputShapeData.Item3)) {
+                    hf.setMinus(text_bigneg3);
+                    hf.clear(text_bigpos3);
+                }
+            }
         }
     }
 
     void resetAllText() {
-        text_rightbigxp.GetComponent<TextMeshPro>().text = "";
-        text_rightbigyq.GetComponent<TextMeshPro>().text = "";
-        text_rightbigzr.GetComponent<TextMeshPro>().text = "";
-        text_rightsmallp.GetComponent<TextMeshPro>().text = "";
-        text_rightsmallq.GetComponent<TextMeshPro>().text = "";
-        text_rightsmallr.GetComponent<TextMeshPro>().text = "";
-        text_rightsmalls.GetComponent<TextMeshPro>().text = "";
+        hf.clear(text_rightbigxp);
+        hf.clear(text_rightbigyq);
+        hf.clear(text_rightbigzr);
+        hf.clear(text_rightsmallp);
+        hf.clear(text_rightsmallq);
+        hf.clear(text_rightsmallr);
+        hf.clear(text_rightsmalls);
 
-        text_bigneg1.GetComponent<TextMeshPro>().text = "";
-        text_bigneg2.GetComponent<TextMeshPro>().text = "";
-        text_bigneg3.GetComponent<TextMeshPro>().text = "";
-        text_bigpos2.GetComponent<TextMeshPro>().text = "";
-        text_bigpos3.GetComponent<TextMeshPro>().text = "";
-        text_smallneg1.GetComponent<TextMeshPro>().text = "";
-        text_smallneg2.GetComponent<TextMeshPro>().text = "";
-        text_smallneg3.GetComponent<TextMeshPro>().text = "";
-        text_smallneg4.GetComponent<TextMeshPro>().text = "";
-        text_smallpos2.GetComponent<TextMeshPro>().text = "";
-        text_smallpos4.GetComponent<TextMeshPro>().text = "";
+        hf.clear(text_bigneg1);
+        hf.clear(text_bigneg2);
+        hf.clear(text_bigneg3);
+        hf.clear(text_bigpos2);
+        hf.clear(text_bigpos3);
+        hf.clear(text_smallneg1);
+        hf.clear(text_smallneg2);
+        hf.clear(text_smallneg3);
+        hf.clear(text_smallneg4);
+        hf.clear(text_smallpos2);
+        hf.clear(text_smallpos4);
     }
-
-
-
-
-
 
 
 
@@ -726,10 +632,6 @@ public class GameControllerScript : MonoBehaviour {
         int minutes = secRemaining / 60;
         int seconds = secRemaining % 60;
         timeText.GetComponent<TextMeshPro>().text = "Time: " + minutes.ToString("00") + ":" + seconds.ToString("00");
-
-
-
-
 
         if (roundState == 0 && time-timeWhenLastShapeFinished > 3) {
             product = emptyAxes;
