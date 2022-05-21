@@ -593,9 +593,9 @@ public class GameControllerScript : MonoBehaviour {
     void setColorblind() {
         //Colorblind mode
         if (PlayerPrefs.GetInt("Colorblind") == 1) {
-            //If colorblind mode is on, selected color is orange and unselected is blue
-            buttonSelectedMaterial.color = new Color(1, 0.5f, 0);
-            buttonDeselectedMaterial.color = new Color(0, 0, 1);
+            //If colorblind mode is on, selected color is dark orange and unselected is light blue
+            buttonSelectedMaterial.color = new Color(0.8f, 0.4f, 0.0f);
+            buttonDeselectedMaterial.color = new Color(0.5f, 0.5f, 1);
 
         } else {
             //Otherwise selected color is green and unselected is red
