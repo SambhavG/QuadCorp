@@ -95,7 +95,6 @@ public class SixPlanesCuttingController : MonoBehaviour {
         }
 
         
-
         m_MaterialPropertyBlock.SetVector("Vector3_Plane1_Normal", normal1);
         m_MaterialPropertyBlock.SetVector("Vector3_Plane1_Position", position1);
         m_MaterialPropertyBlock.SetVector("Vector3_Plane2_Normal", normal2);

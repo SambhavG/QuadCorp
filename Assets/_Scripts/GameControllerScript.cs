@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 using hf = HelperFunctions;
 
@@ -72,6 +73,8 @@ using hf = HelperFunctions;
 public class GameControllerScript : MonoBehaviour {
 
     //The game has several states
+    //-2: Player is viewing the instructions screen
+    //-1: Player is viewing the 3 2 1 countdown
 
     //0: Creation
     //1: creation->station1 travel
@@ -82,14 +85,45 @@ public class GameControllerScript : MonoBehaviour {
     //6: station2->destruction
     //7: destruction and reset
 
+    //Time variables:
+    //time: When player loads the level
+    //timePresedStart: When player hits the start button
+    //timeCountdownOver: When the countdown hits 0
+
+
     //Level and round variables
     public static int levelNumber = 1;
-    public static int roundNumber = 1;
-    private int roundState;
+    public static int roundNumber;
+    public static int roundState;
+    public static int numShapesMade;
+    public static bool paused;
 
     public TextMeshPro scoreText;
     public TextMeshPro timeText;
-    int timePerRound = 180;
+    public TextMeshProUGUI beginningCountdownText;
+    int timePerLevel = 180;
+    int timePerLevelLevel7 = 360;
+
+    //Colors
+    private Color[] colors = new Color[7];
+    private string[] colorStrings = {"#E5383B", "#CE3032", "#BA282A", "#A62022", "#91181A", "#7A0F10", "#660708"};
+
+    //Camera lock
+    public static bool cameraLocked;
+
+    //Level screens
+    public GameObject levelStartScreen;
+    public GameObject levelPauseScreen;
+    public GameObject levelCompleteScreen;
+
+    //Timing variables
+    public float time;
+    private float timePressedStart;
+    private float timeCountdownOver;
+
+    //Star requirements
+    int[] scoreReqs = {1, 3, 6};
+    int[] scoreReqsLevel7 = {1, 6, 12};
 
     //Target shape variables
     private int desiredShape;
@@ -130,31 +164,35 @@ public class GameControllerScript : MonoBehaviour {
     public TextMeshPro text_smallpos4;
 
 
-    
+    public Texture2D ellipsoidIntro;
     public Texture2D ellipsoid0;
     public Texture2D ellipsoid1;
     public Texture2D ellipsoid2;
     public Texture2D ellipsoid3;
     public Texture2D ellipsoid4;
     public Texture2D ellipsoid5;
+    public Texture2D hypOfOneSheetIntro;
     public Texture2D hypOfOneSheet0;
     public Texture2D hypOfOneSheet1;
     public Texture2D hypOfOneSheet2;
     public Texture2D hypOfOneSheet3;
     public Texture2D hypOfOneSheet4;
     public Texture2D hypOfOneSheet5;
+    public Texture2D coneIntro;
     public Texture2D cone0;
     public Texture2D cone1;
     public Texture2D cone2;
     public Texture2D cone3;
     public Texture2D cone4;
     public Texture2D cone5;
+    public Texture2D hypOfTwoSheetsIntro;
     public Texture2D hypOfTwoSheets0;
     public Texture2D hypOfTwoSheets1;
     public Texture2D hypOfTwoSheets2;
     public Texture2D hypOfTwoSheets3;
     public Texture2D hypOfTwoSheets4;
     public Texture2D hypOfTwoSheets5;
+    public Texture2D ellipticParaboloidIntro;
     public Texture2D ellipticParaboloid0;
     public Texture2D ellipticParaboloid11;
     public Texture2D ellipticParaboloid12;
@@ -162,6 +200,7 @@ public class GameControllerScript : MonoBehaviour {
     public Texture2D ellipticParaboloid21;
     public Texture2D ellipticParaboloid22;
     public Texture2D ellipticParaboloid23;
+    public Texture2D hyperbolicParaboloidIntro;
     public Texture2D hyperbolicParaboloid0;
     public Texture2D hyperbolicParaboloid11;
     public Texture2D hyperbolicParaboloid12;
@@ -169,6 +208,8 @@ public class GameControllerScript : MonoBehaviour {
     public Texture2D hyperbolicParaboloid21;
     public Texture2D hyperbolicParaboloid22;
     public Texture2D hyperbolicParaboloid23;
+    public Texture2D allIntro;
+    public Texture2D all0;
 
     //Doors
     public GameObject door1;
@@ -179,10 +220,6 @@ public class GameControllerScript : MonoBehaviour {
 
     //roundState 2
     public new Camera camera;
-
-    public float time;
-    private float timeWhenLastShapeFinished;
-    private float timeWhenRoundStarted;
 
     private int conveyorSpeed = 10;
     private Transform product;
@@ -238,77 +275,13 @@ public class GameControllerScript : MonoBehaviour {
     //roundState 5
     private float roundState5EndTime;
 
+    //End screen stars
+    public GameObject stars;
+    public Sprite yellowStar;
+    public Sprite grayStar;
+    //End screen shapes constructed text
+    public TextMeshProUGUI shapesConstructedText;
 
-    // Start is called before the first frame update
-    void Start() {
-        //Lock cursor and hide it
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        //Set roundstate to preround
-        roundState = 0; 
-        //Reset timer and timing mechanism
-        time = 0;
-        timeWhenLastShapeFinished = 0;
-        //Initialize selectedKnobInstance
-        selectedKnobInstance = knob1;
-        //Unhide ceiling
-        ceiling.SetActive(true);
-        //Place buttons and knobs in an array
-        buttons[0,0] = x2;
-        buttons[0,1] = nx2;
-        buttons[0,2] = x;
-        buttons[0,3] = nx;
-        buttons[1,0] = y2;
-        buttons[1,1] = ny2;
-        buttons[1,2] = y;
-        buttons[1,3] = ny;
-        buttons[2,0] = z2;
-        buttons[2,1] = nz2;
-        buttons[2,2] = z;
-        buttons[2,3] = nz;
-        buttons[3,0] = zero;
-        buttons[3,1] = one;
-        buttons[3,2] = one;
-        buttons[3,3] = one;
-
-        knobs[0] = knob1;
-        knobs[1] = knob2;
-        knobs[2] = knob3;
-
-        knobIncrement = (rightBound - leftBound) / 3;
-
-        //Update jumbotron with starting screen
-        jumbotron.GetComponent<Renderer>().material.mainTexture = ellipsoid1;
-
-        switch(levelNumber) {
-            case 1:
-                hf.setTexture(jumbotron, ellipsoid0);
-                break;
-            case 2:
-                hf.setTexture(jumbotron, hypOfOneSheet0);
-                break;
-            case 3:
-                hf.setTexture(jumbotron, cone0);
-                break;
-            case 4:
-                hf.setTexture(jumbotron, hypOfTwoSheets0);
-                break;
-            case 5:
-                hf.setTexture(jumbotron, ellipticParaboloid0);
-                break;
-            case 6:
-                hf.setTexture(jumbotron, hyperbolicParaboloid0);
-                break;
-            default:
-                hf.setTexture(jumbotron, ellipsoid0);
-                break;
-        }
-        resetAllText();
-
-        
-
-
-    }
 
     void updateJumbotron(int inputShape, (int, int, int, int, int, int, int) inputShapeData, int inputRoundNumber) {
 
@@ -316,7 +289,7 @@ public class GameControllerScript : MonoBehaviour {
         resetAllText();
 
         if (inputShape <= 4) {
-            questionType = Random.Range(1,5);
+            questionType = Random.Range(1,6);
             if (inputRoundNumber <= 2) {questionType = 1;}
 
             //Set background
@@ -505,7 +478,7 @@ public class GameControllerScript : MonoBehaviour {
             }
         } else {
             //Shape is elliptic paraboloid or hyperbolic paraboloid
-            questionType = Random.Range(1, 2);
+            questionType = Random.Range(1, 3);
             if (roundNumber <= 2) {
                 questionType = 1;
             }
@@ -617,23 +590,182 @@ public class GameControllerScript : MonoBehaviour {
     }
 
 
+    void setColorblind() {
+        //Colorblind mode
+        if (PlayerPrefs.GetInt("Colorblind") == 1) {
+            //If colorblind mode is on, selected color is orange and unselected is blue
+            buttonSelectedMaterial.color = new Color(1, 0.5f, 0);
+            buttonDeselectedMaterial.color = new Color(0, 0, 1);
 
+        } else {
+            //Otherwise selected color is green and unselected is red
+            buttonSelectedMaterial.color = new Color(0, 1, 0);
+            buttonDeselectedMaterial.color = new Color(1, 0, 0);
+        }
+    }
+
+    void setAllMaterials() {
+        //Set materials
+        for (int i = 0; i < buttons.GetLength(0); i++) {
+            for (int j = 0; j < buttons.GetLength(1); j++) {
+                buttons[i, j].GetComponent<Renderer>().material = buttonDeselectedMaterial;
+            }
+        }
+        for (int i = 0; i < knobs.GetLength(0); i++) {
+            knobs[i].GetComponent<Renderer>().material = buttonDeselectedMaterial;
+            
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start() {
+        //Show cursor so user can click start button, and lock camera
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        cameraLocked = true;
+
+        //Set roundstate to starting screen
+        roundState = -2;
+        //Reset roundNumber
+        roundNumber = 1;
+        //Reset numShapesMade
+        numShapesMade = 0;
+        //Reset pause state
+        paused = false;
+        //Reset timer and timing mechanism
+        time = 0;
+        timePressedStart = 0;
+        timeCountdownOver = 0;
+        if (levelNumber == 7) {
+            timePerLevel = timePerLevelLevel7;
+            scoreReqs = scoreReqsLevel7;
+        }
+        //Initialize selectedKnobInstance
+        selectedKnobInstance = knob1;
+        //Unhide ceiling
+        ceiling.SetActive(true);
+        //Place buttons and knobs in an array
+        buttons[0,0] = x2;
+        buttons[0,1] = nx2;
+        buttons[0,2] = x;
+        buttons[0,3] = nx;
+        buttons[1,0] = y2;
+        buttons[1,1] = ny2;
+        buttons[1,2] = y;
+        buttons[1,3] = ny;
+        buttons[2,0] = z2;
+        buttons[2,1] = nz2;
+        buttons[2,2] = z;
+        buttons[2,3] = nz;
+        buttons[3,0] = zero;
+        buttons[3,1] = one;
+        buttons[3,2] = one;
+        buttons[3,3] = one;
+
+        knobs[0] = knob1;
+        knobs[1] = knob2;
+        knobs[2] = knob3;
+
+        knobIncrement = (rightBound - leftBound) / 3;
+
+        //Populate colors array
+        for (int i = 0; i < colors.Length; i++) {
+            ColorUtility.TryParseHtmlString(colorStrings[i], out colors[i]);
+        }
+        
+
+        //Set colorblind mode
+        setColorblind();
+        //Set materials
+        setAllMaterials();
+
+        //Update jumbotron with starting screen
+        GameObject startScreenImage = levelStartScreen.transform.Find("Image").gameObject;
+        switch(levelNumber) {
+            case 1:
+                hf.setTexture(jumbotron, ellipsoid0);
+                hf.setUITexture(startScreenImage, ellipsoidIntro);
+                break;
+            case 2:
+                hf.setTexture(jumbotron, hypOfOneSheet0);
+                hf.setUITexture(startScreenImage, hypOfOneSheetIntro);
+                break;
+            case 3:
+                hf.setTexture(jumbotron, cone0);
+                hf.setUITexture(startScreenImage, coneIntro);
+                break;
+            case 4:
+                hf.setTexture(jumbotron, hypOfTwoSheets0);
+                hf.setUITexture(startScreenImage, hypOfTwoSheetsIntro);
+                break;
+            case 5:
+                hf.setTexture(jumbotron, ellipticParaboloid0);
+                hf.setUITexture(startScreenImage, ellipticParaboloidIntro);
+                break;
+            case 6:
+                hf.setTexture(jumbotron, hyperbolicParaboloid0);
+                hf.setUITexture(startScreenImage, hyperbolicParaboloidIntro);
+                break;
+            case 7:
+                hf.setTexture(jumbotron, all0);
+                hf.setUITexture(startScreenImage, allIntro);
+                break;
+            default:
+                hf.setTexture(jumbotron, ellipsoid0);
+                hf.setUITexture(startScreenImage, ellipsoidIntro);
+                break;
+        }
+        resetAllText();
+    }
+
+    
     // Update is called once per frame
     void Update() {
 
-        time += Time.deltaTime;
+        if (!paused) {
+            time += Time.deltaTime;
+        }
 
         //Update score
-        scoreText.GetComponent<TextMeshPro>().text = "Score: " + (roundNumber-1).ToString();
+        scoreText.GetComponent<TextMeshPro>().text = "Score: " + numShapesMade.ToString();
 
-        int secElapsed = (int)(time - timeWhenRoundStarted);
-        int secRemaining = Mathf.Max(timePerRound - secElapsed, 0);
+        //Update timer
+        int secElapsed = (int)(time - timeCountdownOver);
+        if (timeCountdownOver == 0) {
+            secElapsed = 0;
+        }
+        int secRemaining = Mathf.Max(timePerLevel - secElapsed, 0);
+        
         //Convert seconds to minutes:seconds
         int minutes = secRemaining / 60;
         int seconds = secRemaining % 60;
+        
+        //Update timer text
         timeText.GetComponent<TextMeshPro>().text = "Time: " + minutes.ToString("00") + ":" + seconds.ToString("00");
 
-        if (roundState == 0 && time-timeWhenLastShapeFinished > 3) {
+        //Round -2
+        if (roundState == -2) {
+            if (!levelStartScreen.activeSelf) {
+                roundState = -1;
+                timePressedStart = time;
+                cameraLocked = false;
+            }
+        } else if (roundState == -1) {
+            //Countdown code
+            //Update beginningCountdown from 3, 2, 1, 0
+            int beginningCountdown = (int) (timePressedStart + 3.99 - time);
+            if (beginningCountdown != 0) {
+                beginningCountdownText.GetComponent<TMP_Text>().text = beginningCountdown.ToString();
+            } else {
+                beginningCountdownText.GetComponent<TMP_Text>().text = "Go!";
+            }
+
+            if (time-timePressedStart > 4) {
+                roundState = 0;
+                timeCountdownOver = time;
+                beginningCountdownText.enabled = false;
+            }
+        } else if (roundState == 0) {
             product = emptyAxes;
             product.transform.position = new Vector3(-5, 1, 14);
 
@@ -641,7 +773,7 @@ public class GameControllerScript : MonoBehaviour {
             //If level is 1...6, desired shape should be of type levelNumber
             //If level is 7, randomly generate a number for desired shape
             int desiredShape = levelNumber;
-            if (levelNumber > 6) {
+            if (levelNumber == 7) {
                 desiredShape = Random.Range(1,7);
             }
 
@@ -806,7 +938,6 @@ public class GameControllerScript : MonoBehaviour {
 
                 if (Physics.Raycast(ray, out hit)) {
                     float zeroOneDistance = hf.distanceProportion(initialPosition, hit.point, finalPosition);
-                    //Debug.Log(zeroOneDistance);
                     xPos = Mathf.Lerp(leftBound, rightBound, zeroOneDistance);
                 }
                 
@@ -858,6 +989,7 @@ public class GameControllerScript : MonoBehaviour {
                     //Set round state to 5
                     roundState = 5;
                     roundState5EndTime = Time.time;
+                    numShapesMade++;
                 }
             }
 
@@ -884,10 +1016,10 @@ public class GameControllerScript : MonoBehaviour {
                 roundState = 7;
             }
 
-            if (product.position.z < 12) {
+            if (product.position.z < 14) {
                 //Hide door
                 door2.GetComponent<Renderer>().enabled = false;
-            } else if (product.position.z > 12) {
+            } else if (product.position.z > 14) {
                 //Show door
                 door2.GetComponent<Renderer>().enabled = true;
             }
@@ -922,11 +1054,51 @@ public class GameControllerScript : MonoBehaviour {
 
         }
 
-        //If the m key is pressed, go back to the main menu
-        if (Input.GetKeyDown(KeyCode.M)) {
+        //If the escape key is pressed, go to the pause menu, but only if the game is not over or at the starting screen
+        if (Input.GetKeyDown(KeyCode.Escape) && paused == false && secRemaining > 0 && roundState != -2) {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            SceneManager.LoadScene("MainMenu");
+            levelPauseScreen.SetActive(true);
+            //Color pause screen
+            levelPauseScreen.transform.Find("Image").GetComponent<Image>().color = colors[levelNumber-1];
+            cameraLocked = true;
+            paused = true;
+        } else if (Input.GetKeyDown(KeyCode.Escape) && paused == true) {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            levelPauseScreen.SetActive(false);
+            cameraLocked = false;
+            paused = false;
+        }
+
+        //If the time runs out, go to the game over screen
+        if (secRemaining <= 0) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            levelCompleteScreen.SetActive(true);
+            //Color game over screen
+            levelCompleteScreen.transform.Find("Image").GetComponent<Image>().color = colors[levelNumber-1];
+            cameraLocked = true;
+            paused = true;
+
+            //Display the score
+            shapesConstructedText.text = "Shapes constructed:\n" + numShapesMade;
+            int numStars = 0;
+            //set stars
+            for (int j = 0; j < 3; j++) {
+                if (numShapesMade >= scoreReqs[j]) {
+                    stars.transform.Find("star"+(j+1)).gameObject.GetComponent<Image>().sprite = yellowStar;
+                    numStars++;
+                } else {
+                    stars.transform.Find("star"+(j+1)).gameObject.GetComponent<Image>().sprite = grayStar;
+                }
+            }
+
+            //Update stars in playerprefs if new star count is higher than current
+            if (numStars > PlayerPrefs.GetInt("Level" + levelNumber + "Stars")) {
+                PlayerPrefs.SetInt("Level" + levelNumber + "Stars", numStars);
+            }
+
         }
     }
 }

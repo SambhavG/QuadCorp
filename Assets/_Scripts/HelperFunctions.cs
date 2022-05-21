@@ -2,15 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HelperFunctions
 {
     //Function to check if two int arrays are equal
     public static bool areIntArraysEqual(int[] arr1, int[] arr2) {
-        //print elems of arr1
-        //Debug.Log("arr1: " + arr1[0] + " " + arr1[1] + " " + arr1[2] + " " + arr1[3]);
-        //print elems of arr2
-        //Debug.Log("arr2: " + arr2[0] + " " + arr2[1] + " " + arr2[2] + " " + arr2[3]);
 
 
         if (arr1.Length != arr2.Length) {
@@ -224,7 +221,6 @@ public class HelperFunctions
         Vector2 a2 = new Vector2(a.x, a.z);
         Vector2 b2 = new Vector2(b.x, b.z);
         Vector2 c2 = new Vector2(c.x, c.z);
-        Debug.Log(b2);
 
         Vector2 atoc = c2-a2;
         Vector2 atob = b2-a2;
@@ -235,7 +231,6 @@ public class HelperFunctions
         //If projection is in the opposite direction of atoc, then the distance is negative
         if (Vector2.Dot(projection, atoc) < 0 || b2.x < a2.x) {
             dist = -dist;
-            Debug.Log("Negative");
         }
 
         return dist/atoc.magnitude;
@@ -243,6 +238,12 @@ public class HelperFunctions
 
     public static void setTexture(GameObject obj, Texture2D textureInput) {
         obj.GetComponent<Renderer>().material.mainTexture = textureInput;
+        return;
+    }
+
+    public static void setUITexture(GameObject obj, Texture2D textureInput) {
+        Sprite sprite = Sprite.Create(textureInput, new Rect(0, 0, textureInput.width, textureInput.height), new Vector2(0.5f, 0.5f));
+        obj.GetComponent<Image>().sprite = sprite;
         return;
     }
 
